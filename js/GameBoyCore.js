@@ -5824,9 +5824,9 @@ GameBoyCore.prototype.executeIteration = async function () {
 			if (this.serialShiftTimer <= 0) {
 				this.serialShiftTimer = this.serialShiftTimerAllocated;
 				fetch(this.linkapi + ':5000/api/transfer?player=' + this.player + '&data=' + this.memory[0xFF01])
-  .then(response => response.json())
+  .then(response => response.text())
   .then(data => {
-      this.memory[0xFF01] = data.byte;  // assign the actual byte here, asynchronously
+      this.memory[0xFF01] = data;  // assign the actual byte here, asynchronously
       // continue serial emulation with receivedByte if needed
   });
 
