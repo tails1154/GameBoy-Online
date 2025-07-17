@@ -10,6 +10,7 @@
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 function GameBoyCore(canvas, ROMImage) {
+	
 	//Params, etc...
 	this.canvas = canvas;						//Canvas DOM object for drawing out the graphics to.
 	this.drawContext = null;					// LCD Context
@@ -5749,7 +5750,7 @@ GameBoyCore.prototype.run = function () {
 		}
 	}
 }
-GameBoyCore.prototype.executeIteration = function () {
+GameBoyCore.prototype.executeIteration = async function () {
 	//Iterate the interpreter loop:
 	var opcodeToExecute = 0;
 	var timedTicks = 0;
@@ -5812,7 +5813,7 @@ GameBoyCore.prototype.executeIteration = function () {
 			this.serialShiftTimer -= this.CPUTicks;
 			if (this.serialShiftTimer <= 0) {
 				this.serialShiftTimer = this.serialShiftTimerAllocated;
-				this.memory[0xFF01] = fetch('http://127.0.0.1:5000/api/receive?player=player2')
+				this.memory[0xFF01] = fetch(linkapi + ':5000/api/receive?player=player2')
     .then(response => response.json())
     .then(data => {
         let receivedByte = data.byte;
