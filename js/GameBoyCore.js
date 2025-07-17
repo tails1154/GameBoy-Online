@@ -5823,6 +5823,11 @@ GameBoyCore.prototype.executeIteration = async function () {
 			this.serialShiftTimer -= this.CPUTicks;
 			if (this.serialShiftTimer <= 0) {
 				this.serialShiftTimer = this.serialShiftTimerAllocated;
+				if (this.player == "player1") {
+					this.memory[0xFF02] = 0x81; // 10000001b
+				} else {
+					this.memory[0xFF02] = 0x80; // 10000000b
+				}
 				fetch(this.linkapi + ':5000/api/transfer?player=' + this.player + '&data=' + this.memory[0xFF01])
   .then(response => response.text())
   .then(data => {
