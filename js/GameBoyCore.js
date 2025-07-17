@@ -5812,7 +5812,12 @@ GameBoyCore.prototype.executeIteration = function () {
 			this.serialShiftTimer -= this.CPUTicks;
 			if (this.serialShiftTimer <= 0) {
 				this.serialShiftTimer = this.serialShiftTimerAllocated;
-				this.memory[0xFF01] = ((this.memory[0xFF01] << 1) & 0xFE) | 0x01;	//We could shift in actual link data here if we were to implement such!!!
+				this.memory[0xFF01] = fetch('http://127.0.0.1:5000/api/receive?player=player2')
+    .then(response => response.json())
+    .then(data => {
+        let receivedByte = data.byte;
+        // use receivedByte in your serial emulation
+    });
 			}
 		}
 		//End of iteration routine:
