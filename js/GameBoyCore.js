@@ -16,6 +16,11 @@ function GameBoyCore(canvas, ROMImage) {
 	} else {
 		this.linkapi = prompt("Enter your link api url (must have cors allowing *)");
 	}
+	if (window.confirm("Press OK for player 1, press Cancel for player 2.")) {
+		this.player = "player1";
+	} else {
+		thi.player = "player2";
+	}
 
 	this.canvas = canvas;						//Canvas DOM object for drawing out the graphics to.
 	this.drawContext = null;					// LCD Context
@@ -5818,12 +5823,13 @@ GameBoyCore.prototype.executeIteration = async function () {
 			this.serialShiftTimer -= this.CPUTicks;
 			if (this.serialShiftTimer <= 0) {
 				this.serialShiftTimer = this.serialShiftTimerAllocated;
-				this.memory[0xFF01] = fetch(this.linkapi + ':5000/api/receive?player=' + this.linkplayer + '&data=' + this.memory[0xFF01])
-    .then(response => response.json())
-    .then(data => {
-        let receivedByte = data.byte;
-        // use receivedByte in your serial emulation
-    });
+				fetch(this.linkapi + ':5000/api/receive?player=' + this.linkplayer + '&data=' + this.memory[0xFF01])
+  .then(response => response.json())
+  .then(data => {
+      this.memory[0xFF01] = data.byte;  // assign the actual byte here, asynchronously
+      // continue serial emulation with receivedByte if needed
+  });
+
 			}
 		}
 		//End of iteration routine:
