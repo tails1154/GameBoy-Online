@@ -9,14 +9,15 @@
 
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-if (linkapi = window.confirm("Do you want to use the default link api?")) {
-	let linkapi = "http://127.0.0.1";
-} else {
-	let linkapi = prompt("Enter your link api url (must have cors allowing *)";
-}
 function GameBoyCore(canvas, ROMImage) {
 	
 	//Params, etc...
+	if (window.confirm("Do you want to use the default link api?")) {
+		let this.linkapi = "http://127.0.0.1";
+	} else {
+		let this.linkapi = prompt("Enter your link api url (must have cors allowing *)";
+	}
+
 	this.canvas = canvas;						//Canvas DOM object for drawing out the graphics to.
 	this.drawContext = null;					// LCD Context
 	this.ROMImage = ROMImage;					//The game's ROM.
@@ -5818,7 +5819,7 @@ GameBoyCore.prototype.executeIteration = async function () {
 			this.serialShiftTimer -= this.CPUTicks;
 			if (this.serialShiftTimer <= 0) {
 				this.serialShiftTimer = this.serialShiftTimerAllocated;
-				this.memory[0xFF01] = fetch(linkapi + ':5000/api/receive?player=player2')
+				this.memory[0xFF01] = fetch(this.linkapi + ':5000/api/receive?player=player2')
     .then(response => response.json())
     .then(data => {
         let receivedByte = data.byte;
