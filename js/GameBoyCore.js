@@ -12,9 +12,9 @@
 function GameBoyCore(canvas, ROMImage) {
 	//Params, etc...
 	if (window.confirm("Do you want to use the default link api?")) {
-		let this.linkapi = "http://127.0.0.1";
+		this.linkapi = "http://127.0.0.1";
 	} else {
-		let this.linkapi = prompt("Enter your link api url (must have cors allowing *)");
+		this.linkapi = prompt("Enter your link api url (must have cors allowing *)");
 	}
 
 	this.canvas = canvas;						//Canvas DOM object for drawing out the graphics to.
