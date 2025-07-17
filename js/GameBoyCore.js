@@ -10,12 +10,11 @@
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 function GameBoyCore(canvas, ROMImage) {
-	
 	//Params, etc...
 	if (window.confirm("Do you want to use the default link api?")) {
 		let this.linkapi = "http://127.0.0.1";
 	} else {
-		let this.linkapi = prompt("Enter your link api url (must have cors allowing *)";
+		let this.linkapi = prompt("Enter your link api url (must have cors allowing *)");
 	}
 
 	this.canvas = canvas;						//Canvas DOM object for drawing out the graphics to.
