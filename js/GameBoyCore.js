@@ -5812,31 +5812,35 @@ GameBoyCore.prototype.executeIteration = async function () {
 				}
 			}
 		}
-		if (this.serialTimer > 0) {										//Serial Timing
-			//IRQ Counter:
-			this.serialTimer -= this.CPUTicks;
-			if (this.serialTimer <= 0) {
-				this.interruptsRequested |= 0x8;
-				this.checkIRQMatching();
-			}
-			//Bit Shit Counter:
-			this.serialShiftTimer -= this.CPUTicks;
-			if (this.serialShiftTimer <= 0) {
-				this.serialShiftTimer = this.serialShiftTimerAllocated;
-				if (this.player == "player1") {
-					//this.memory[0xFF02] = 0x81; // 10000001b
-				} else {
-					//this.memory[0xFF02] = 0x80; // 10000000b
-				}
-				async fetch(this.linkapi + ':5000/api/transfer?player=' + this.player + '&data=' + this.memory[0xFF01])
-  .then(response => response.text())
-  .then(data => {
-      this.memory[0xFF01] = data;  // assign the actual byte here, asynchronously
-      // continue serial emulation with receivedByte if needed
-  });
+		if (this.serialShiftTimer <= 0) {
+  this.serialShiftTimer = this.serialShiftTimerAllocated;
 
-			}
-		}
+  // Extract MSB (bit 7) to send out
+  let outBit = (this.memory[0xFF01] & 0x80) >>> 7;
+
+  // Shift FF01 left by 1 to send bit out
+  this.memory[0xFF01] = ((this.memory[0xFF01] << 1) & 0xFF);
+
+  // Get incoming bit from API or simulated slave
+  fetch(this.linkapi + ':5000/api/transferbit?player=' + this.player + '&bit=' + outBit)
+    .then(response => response.text())
+    .then(bitStr => {
+      let inBit = parseInt(bitStr, 10) & 1;
+      this.memory[0xFF01] |= inBit; // set LSB with received bit
+    });
+
+  this.serialBitsTransferred = (this.serialBitsTransferred || 0) + 1;
+
+  if (this.serialBitsTransferred >= 8) {
+    // Transfer done
+    this.memory[0xFF02] &= 0x7F; // clear bit 7 - transfer complete
+    this.serialTimer = 0;
+    this.serialBitsTransferred = 0;
+    this.interruptsRequested |= 0x8;
+    this.checkIRQMatching();
+  }
+}
+
 		//End of iteration routine:
 		if (this.emulatorTicks >= this.CPUCyclesTotal) {
 			this.iterationEndRoutine();
