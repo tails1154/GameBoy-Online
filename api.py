@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 from collections import deque
 
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)  # allows all origins by default
 
 # Buffers for each connected emulator ("player1", "player2")
 buffers = {
