@@ -5818,7 +5818,7 @@ GameBoyCore.prototype.executeIteration = async function () {
 			this.serialShiftTimer -= this.CPUTicks;
 			if (this.serialShiftTimer <= 0) {
 				this.serialShiftTimer = this.serialShiftTimerAllocated;
-				this.memory[0xFF01] = fetch(this.linkapi + ':5000/api/receive?player=player2')
+				this.memory[0xFF01] = fetch(this.linkapi + ':5000/api/receive?player=' + this.linkplayer + '&data=' + this.memory[0xFF01])
     .then(response => response.json())
     .then(data => {
         let receivedByte = data.byte;
