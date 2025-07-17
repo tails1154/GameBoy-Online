@@ -19,7 +19,7 @@ function GameBoyCore(canvas, ROMImage) {
 	if (window.confirm("Press OK for player 1, press Cancel for player 2.")) {
 		this.player = "player1";
 	} else {
-		thi.player = "player2";
+		this.player = "player2";
 	}
 
 	this.canvas = canvas;						//Canvas DOM object for drawing out the graphics to.
